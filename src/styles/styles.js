@@ -27,7 +27,10 @@ export const Button = styledComponents.button`
     border: none;
     font-family: Lexend Deca;
     font-size: 21px;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
     &:hover{
         cursor: pointer;
     }

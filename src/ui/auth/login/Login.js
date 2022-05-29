@@ -1,17 +1,68 @@
-import styledComponents from "styled-components";
-import logo from "../../../assets/logo.png";
+import { ThreeDots } from "react-loader-spinner";
+import { useState, useContext } from "react";
 import { FormField, Redirect, Button } from "../../../styles/styles";
+import UserContext from "../../../contexts/UserContext";
+import logo from "../../../assets/logo.png";
+import styledComponents from "styled-components";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+
+    const { setUser } = useContext(UserContext);
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [pass, setPass] = useState("");
+    const navigate = useNavigate();
+
+    async function onSubmitForm(event) {
+        setLoading(true);
+        event.preventDefault();
+        if (isEmailValid(email) && isPassValid(pass)) {
+            await login(email, pass);
+        }
+        setLoading(false);
+    }
+
+    async function login(email, pass) {
+        try {
+            const promise = await axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', {
+                email: email,
+                password: pass
+            });
+            setUser(promise.data);
+            navigate("/hoje");
+        } catch (error) {
+            alert(error.response.data.message);
+        }
+    }
+
+    function isEmailValid(email) {
+        if (email === "") {
+            alert("Informe seu email!");
+            return false;
+        }
+        return true;
+    }
+
+    function isPassValid(pass) {
+        if (pass === "") {
+            alert("Informe sua senha!");
+            return false;
+        }
+        return true;
+    }
+
+
     return (
         <Body>
             <img src={logo} alt="Logo" />
-            <form>
-                <FormField placeholder="email" />
-                <FormField type="password" placeholder="senha" />
+            <form onSubmit={onSubmitForm}>
+                <FormField disabled={loading} value={email} type="email" placeholder="email" onChange={e => setEmail(e.target.value)} />
+                <FormField disabled={loading} value={pass} type="password" placeholder="senha" onChange={e => setPass(e.target.value)} />
+                <Button type="submit">{loading ? <ThreeDots color="white" /> : "Entrar"}</Button>
             </form>
-            <Button type="submit">Entrar</Button>
-            <Redirect href="/cadastro">Não tem uma conta? Cadastre-se</Redirect>
+            <Redirect href="/cadastro">Não tem uma conta? Cadastre-se!</Redirect>
         </Body>
     );
 }
