@@ -12,7 +12,7 @@ import { ThreeDots } from 'react-loader-spinner';
 
 export default function Hoje() {
     dayjs.locale('pt-br');
-    const {habitosCount,setHabitosCount} = useContext(HabitosCountContext);
+    const { habitosCount, setHabitosCount } = useContext(HabitosCountContext);
     const { user } = useContext(UserContext);
     const [habitos, setHabitos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ export default function Hoje() {
         promise.then(response => {
             setHabitos([...response.data]);
             setLoading(false);
-            setHabitosCount((response.data.filter(habito => habito.done === true).length / response.data.length) * 100);
+            setHabitosCount(response.data.length > 0 ? (response.data.filter(habito => habito.done === true).length / response.data.length) * 100 : 0);
             setLoading(false);
         });
         promise.catch(err => {
@@ -37,8 +37,8 @@ export default function Hoje() {
 
 
 
-    function doneHabito(id){
-        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`,{}, {
+    function doneHabito(id) {
+        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`, {}, {
             headers: { Authorization: `Bearer ${user.token}` }
         });
         promise.then(response => {
@@ -50,18 +50,18 @@ export default function Hoje() {
         });
     }
 
-    function checkHabito(id){
+    function checkHabito(id) {
         habitos.find(habito => habito.id === id).done = true;
         setHabitos([...habitos]);
         setHabitosCount((habitos.filter(habito => habito.done === true).length / habitos.length) * 100);
     }
-    function uncheckHabito(id){
+    function uncheckHabito(id) {
         habitos.find(habito => habito.id === id).done = false;
         setHabitos([...habitos]);
         setHabitosCount((habitos.filter(habito => habito.done === true).length / habitos.length) * 100);
     }
 
-    function undoneHabito(id){
+    function undoneHabito(id) {
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`, {}, {
             headers: { Authorization: `Bearer ${user.token}` }
         });
@@ -73,21 +73,21 @@ export default function Hoje() {
         });
     }
 
-    function onClickButtonCheck(id){
-        if(habitos.filter(habito => habito.id === id)[0].done){
+    function onClickButtonCheck(id) {
+        if (habitos.filter(habito => habito.id === id)[0].done) {
             undoneHabito(id);
-        }else{
+        } else {
             doneHabito(id);
         }
     }
 
     function generateTile(habito) {
         return (
-            <HabitoTile key={habito.id}>
+            <HabitoTile key={habito.id} actived={true}>
                 <div>
                     <h1>{habito.name}</h1>
-                    <h2>Sequencia atual: {habito.currentSequence} dias</h2>
-                    <h2>Seu recorde: {habito.highestSequence} dias</h2>
+                    <h2>Sequencia atual <SpanEditable actived={habito.done}> {`: ${habito.currentSequence}`} dias</SpanEditable></h2>
+                    <h2>Seu recorde <SpanEditable actived={habito.currentSequence === habito.highestSequence && habito.highestSequence > 0}>{`: ${habito.highestSequence}`} dias</SpanEditable></h2>
                 </div>
                 <ButtonToggleDone checked={habito.done} onClick={() => onClickButtonCheck(habito.id)}>
                     <img src={iconCheck} alt="Check" />
@@ -100,8 +100,8 @@ export default function Hoje() {
         <BaseScreen>
             <Body>
                 <Row><span>{todayFormatted}</span></Row>
-                <Subtitle progress={habitos.filter(habito => habito.done === true).length > 0}>{habitosCount == 0 ? "Nenhum hábito concluído ainda!" : `${habitosCount}% dos hábitos concluídos`}</Subtitle>
-                {loading ? <BodyLoading><ThreeDots/></BodyLoading> : habitos.length === 0 ? <BodyLoading>Você não tem hábitos para fazer hoje!</BodyLoading> : habitos.map(habito => generateTile(habito))}
+                <Subtitle progress={habitos.filter(habito => habito.done === true).length > 0}>{habitosCount === 0 ? "Nenhum hábito concluído ainda!" : `${habitosCount}% dos hábitos concluídos`}</Subtitle>
+                {loading ? <BodyLoading><ThreeDots /></BodyLoading> : habitos.length === 0 ? <BodyLoading>Você não tem hábitos para fazer hoje!</BodyLoading> : habitos.map(habito => generateTile(habito))}
             </Body>
         </BaseScreen>
     );
@@ -157,6 +157,8 @@ const HabitoTile = styledComponents.div`
     h2{
         color: #666666;
         font-size: 13px;
+        display: flex;
+
     }
 `;
 
@@ -184,4 +186,13 @@ const ButtonToggleDone = styledComponents.div`
         height: 28px;
         width: 35px;
     }
+
+    &:hover{
+        cursor:pointer;
+    }
+`;
+
+const SpanEditable = styledComponents.div`  
+    color: ${props => props.actived ? "#8FC549" : "#666666"};
+    font-size: 13px;
 `;
