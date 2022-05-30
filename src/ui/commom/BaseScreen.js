@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function BaseScreen({ children }) {
 
     const { user } = useContext(UserContext);
-    const { habitosCount} = useContext(HabitosCountContext);
+    const { habitosCount } = useContext(HabitosCountContext);
     const navigate = useNavigate();
 
     return (
@@ -17,6 +17,7 @@ export default function BaseScreen({ children }) {
                 <span>TrackIt</span>
                 <img src={user.image} alt="Foto do Perfil" />
             </AppBar>
+
             {children}
 
             <BottomBar>
@@ -40,7 +41,7 @@ export default function BaseScreen({ children }) {
                 />
                 <BottomBarButtonText>Hoje</BottomBarButtonText>
             </BottomBarButton>
-            
+
         </ScreenBody>
     );
 }

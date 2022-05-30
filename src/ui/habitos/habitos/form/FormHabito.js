@@ -60,12 +60,14 @@ export default function FormHabito({ onSave, onCancel }) {
             localStorage.clear();
             onSave(response.data);
             cleanForm();
+            onCancel();
         } catch (error) {
             alert(error.response.data.message);
+            setLoading(false);
         }
     }
 
-    function cleanForm(){
+    function cleanForm() {
         setDays([]);
         setDescricaoHabito("");
     }
