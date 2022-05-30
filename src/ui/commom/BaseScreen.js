@@ -2,10 +2,12 @@ import styledComponents from "styled-components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function BaseScreen({ children }) {
 
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     return (
         <ScreenBody>
@@ -16,11 +18,11 @@ export default function BaseScreen({ children }) {
             {children}
 
             <BottomBar>
-                <span>Hábitos</span>
-                <span>Histórico</span>
+                <span onClick={() => navigate("/habitos")}>Hábitos</span>
+                <span onClick={() => navigate("/historico")}>Histórico</span>
             </BottomBar>
 
-            <BottomBarButton>
+            <BottomBarButton onClick={() => navigate("/hoje")}>
                 <CircularProgressbar
                     value={60}
                     text={`${60}%`}

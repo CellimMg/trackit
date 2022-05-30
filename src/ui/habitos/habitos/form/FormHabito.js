@@ -58,7 +58,7 @@ export default function FormHabito({ onSave, onCancel }) {
                 }
             );
             localStorage.clear();
-            onSave(promise.data);
+            onSave(promise.response.data);
         } catch (error) {
             alert(error.response.data.message);
         }

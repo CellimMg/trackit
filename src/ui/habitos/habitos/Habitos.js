@@ -74,7 +74,7 @@ export default function Habitos() {
         <BaseScreen>
             <Body>
                 <Row><span>Meus hábitos</span> <AddButton onClick={() => setOpenForm(true)}>+</AddButton> </Row>
-                {openForm ? <FormHabito onSave={() => callBackSaveHabito()} onCancel={() => setOpenForm(false)} /> : ""}
+                {openForm ? <FormHabito onSave={(data) => callBackSaveHabito(data)} onCancel={() => setOpenForm(false)} /> : ""}
                 {loading ? <BodyLoading><ThreeDots color="#52B6FF" /></BodyLoading> : habitos.length == 0 ? <span>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</span> : habitos.map(habito => generateTile(habito))}
             </Body>
         </BaseScreen>
