@@ -2,11 +2,13 @@ import styledComponents from "styled-components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
+import HabitosCountContext from "../../contexts/HabitosCountContext";
 import { useNavigate } from "react-router-dom";
 
 export default function BaseScreen({ children }) {
 
     const { user } = useContext(UserContext);
+    const { habitosCount} = useContext(HabitosCountContext);
     const navigate = useNavigate();
 
     return (
@@ -24,8 +26,8 @@ export default function BaseScreen({ children }) {
 
             <BottomBarButton onClick={() => navigate("/hoje")}>
                 <CircularProgressbar
-                    value={60}
-                    text={`${60}%`}
+                    value={habitosCount}
+                    text={``}
                     background
                     backgroundPadding={6}
                     styles={
@@ -36,7 +38,9 @@ export default function BaseScreen({ children }) {
                             trailColor: "transparent"
                         })}
                 />
+                <BottomBarButtonText>Hoje</BottomBarButtonText>
             </BottomBarButton>
+            
         </ScreenBody>
     );
 }
@@ -91,6 +95,10 @@ const BottomBar = styledComponents.div`
         font-family: Lexend Deca;
         font-size: 18px;
         color: #52B6FF;
+
+        &:hover{
+            cursor: pointer;
+        }
     }
 `;
 
@@ -102,4 +110,25 @@ const BottomBarButton = styledComponents.div`
     left: 0;
     right: 0;
     margin: 0 auto;
+
+    &:hover{
+        cursor: pointer;
+    }
+`;
+
+const BottomBarButtonText = styledComponents.div`
+    position: absolute;
+    bottom: 32px;
+    height: 22px;
+    width: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-family: Lexend Deca;
+    font-size: 18px;
+    color: white;
+
+    &:hover{
+        cursor: pointer;
+    }       
 `;

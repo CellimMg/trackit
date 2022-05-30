@@ -59,7 +59,7 @@ html, body, .root{
     width: 100%;
 }
 
-span, h1, h2, p{
+span, h1, h2, p, div{
     font-family: 'Lexend Deca', sans-serif;
 }
 `;

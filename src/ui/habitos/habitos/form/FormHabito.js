@@ -49,7 +49,7 @@ export default function FormHabito({ onSave, onCancel }) {
 
     async function sendData(descricaoHabito, days) {
         try {
-            const promise = await axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
+            const response = await axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
                 name: descricaoHabito,
                 days: days
             },
@@ -58,10 +58,16 @@ export default function FormHabito({ onSave, onCancel }) {
                 }
             );
             localStorage.clear();
-            onSave(promise.response.data);
+            onSave(response.data);
+            cleanForm();
         } catch (error) {
             alert(error.response.data.message);
         }
+    }
+
+    function cleanForm(){
+        setDays([]);
+        setDescricaoHabito("");
     }
 
     function isDaysValid(days) {

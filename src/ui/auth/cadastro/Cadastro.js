@@ -38,7 +38,7 @@ export default function Cadastro() {
     }
 
     function isEmailValid(email) {
-        if (email === "") {
+        if (email = "") {
             alert("Informe seu email!");
             return false;
         }

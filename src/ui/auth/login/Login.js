@@ -31,7 +31,7 @@ export default function Login() {
                 password: pass
             });
             setUser(promise.data);
-            navigate("/habitos");
+            navigate("/hoje");
         } catch (error) {
             alert(error.response.data.message);
         }

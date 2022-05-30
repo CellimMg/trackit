@@ -29,6 +29,7 @@ export default function Habitos() {
     }, []);
 
     function callBackSaveHabito(habito) {
+        console.log(habito);
         setHabitos([...habitos, habito]);
     }
 
@@ -48,13 +49,13 @@ export default function Habitos() {
     }
 
     function removeHabito(id) {
-        habitos.splice(habitos.findIndex(habito => habito.id == id), 1);
+        habitos.splice(habitos.findIndex(habito => habito.id === id), 1);
         setHabitos([...habitos]);
     }
 
     function generateTile(habito) {
         return (
-            <HabitoTile>
+            <HabitoTile key={habito.id}>
                 <span>{habito.name}</span>
                 <DaysBox>
                     <BoxDay selected={habito.days.includes(0)} onclick={() => { }} day="D" />
@@ -75,7 +76,7 @@ export default function Habitos() {
             <Body>
                 <Row><span>Meus hábitos</span> <AddButton onClick={() => setOpenForm(true)}>+</AddButton> </Row>
                 {openForm ? <FormHabito onSave={(data) => callBackSaveHabito(data)} onCancel={() => setOpenForm(false)} /> : ""}
-                {loading ? <BodyLoading><ThreeDots color="#52B6FF" /></BodyLoading> : habitos.length == 0 ? <span>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</span> : habitos.map(habito => generateTile(habito))}
+                {loading ? <BodyLoading><ThreeDots color="#52B6FF" /></BodyLoading> : habitos.length === 0 ? <span>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</span> : habitos.map(habito => generateTile(habito))}
             </Body>
         </BaseScreen>
     );
